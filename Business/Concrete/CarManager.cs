@@ -1,6 +1,7 @@
 ﻿using Business.Abstract;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,31 +10,39 @@ namespace Business.Concrete
 {
     public class CarManager : ICarService
     {
-        ICarDal carDal;
+        ICarDal _carDal;
 
         public CarManager(ICarDal carDal)
         {
-            this.carDal = carDal;
+            _carDal = carDal;
         }
 
         public void Add(Car car)
         {
-            try
+            if (car.DailyPrice > 0)
             {
-                carDal.Add(car);
-            }
-            catch (Exception)
-            {
+                try
+                {
+                    _carDal.Add(car);
+                }
+                catch (Exception)
+                {
 
-                throw;
+                    throw;
+                }
             }
+            else
+            {
+                Console.WriteLine("Lütfen geçerli fiyat giriniz.");
+            }         
+
         }
 
         public void Delete(Car car)
         {
             try
             {
-                carDal.Delete(car);
+                _carDal.Delete(car);
             }
             catch (Exception)
             {
@@ -44,25 +53,40 @@ namespace Business.Concrete
 
         public List<Car> GetAll()
         {
-            return carDal.GetAll();
+            return _carDal.GetAll();
         }
 
-        public Car GetById(int Id)
+        public Car Get(int Id)
         {
-            return carDal.GetById(Id);
+            return _carDal.Get(c => c.Id == Id);
         }
 
         public void Update(Car car)
         {
             try
             {
-                carDal.Update(car);
+                _carDal.Update(car);
             }
             catch (Exception)
             {
 
                 throw;
             }
+        }
+
+        public List<Car> GetCarsByBrandId(int brandId)
+        {
+            return _carDal.GetAll(c => c.BrandId == brandId);
+        }
+
+        public List<Car> GetCarsByColorId(int colorId)
+        {
+            return _carDal.GetAll(c => c.ColorId == colorId);
+        }
+
+        public List<CarDetailDto> GetCarDetails()
+        {
+            return _carDal.GetCarDetails();
         }
     }
 }

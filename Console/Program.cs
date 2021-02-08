@@ -4,6 +4,7 @@ using DataAccess.Concrete.EntityFramework;
 using DataAccess.Concrete.InMemory;
 using Entities.Concrete;
 using System;
+using System.Collections.Generic;
 
 namespace ConsoleUI
 {
@@ -14,6 +15,7 @@ namespace ConsoleUI
             //CarTest();
             //ColorTest();
             //BrandTest();
+            ProductTest();
             Console.ReadKey();
         }
 
@@ -69,6 +71,44 @@ namespace ConsoleUI
             foreach (var color in brandService.GetAll())
             {
                 Console.WriteLine("Marka : " + color.BrandName);
+            }
+        }
+
+        private static void ProductTest()
+        {
+            IProductService productService = new ProductManager(new EfProductDal());
+            //List<Product> addList = new List<Product> 
+            //{ 
+            //    new Product
+            //    {
+            //        ProductName = "Bilgisayar",
+            //        UnitPrice = 1855.65m
+            //    },
+
+            //    new Product
+            //    {
+            //        ProductName = "Motorsiklet",
+            //        UnitPrice = 20000
+            //    },
+
+            //    new Product
+            //    {
+            //        ProductName = "Telefon",
+            //        UnitPrice = 2055.75m
+            //    },
+
+            //    new Product
+            //    {
+            //        ProductName = "Kulaklık",
+            //        UnitPrice = 185
+            //    }
+            //};
+
+            //productService.MultipleInsertion(addList);
+            Console.WriteLine("Ürünleri Listele");
+            foreach (var product in productService.GetAll())
+            {
+                Console.WriteLine("ID : {0}, Ürün : {1}, Fiyat : {2} TL", product.Id, product.ProductName, product.UnitPrice);
             }
         }
     }

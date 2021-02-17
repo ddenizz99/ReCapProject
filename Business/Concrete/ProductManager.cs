@@ -1,4 +1,6 @@
 ﻿using Business.Abstract;
+using Business.Constants;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using System;
@@ -9,29 +11,31 @@ namespace Business.Concrete
 {
     public class ProductManager : IProductService
     {
-        IProductDal _productDal;
+        private IProductDal _productDal;
 
         public ProductManager(IProductDal productDal)
         {
             _productDal = productDal;
         }
 
-        public void Add(Product product)
+        public IResult Add(Product product)
         {
             _productDal.Add(product);
+            return new SuccessResult(Messages.ProductAdded);
         }
 
-        public List<Product> GetAll()
+        public IDataResult<List<Product>> GetAll()
         {
-            return _productDal.GetAll();
+            return new SuccessDataResult<List<Product>>(_productDal.GetAll());
         }
 
-        public void MultipleInsertion(List<Product> products)
+        public IResult MultipleInsertion(List<Product> products)
         {
             foreach (var product in products)
             {
                 _productDal.Add(product);
             }
+            return new SuccessResult(Messages.ProductAdded);
         }
     }
 }

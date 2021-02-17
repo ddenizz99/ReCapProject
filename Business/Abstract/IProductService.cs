@@ -1,4 +1,5 @@
-﻿using Entities.Concrete;
+﻿using Core.Utilities.Results;
+using Entities.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,8 +8,8 @@ namespace Business.Abstract
 {
     public interface IProductService
     {
-        List<Product> GetAll();
-        void Add(Product product);
-        void MultipleInsertion(List<Product> products);
+        IDataResult<List<Product>> GetAll();
+        IResult Add(Product product);
+        IResult MultipleInsertion(List<Product> products);
     }
 }

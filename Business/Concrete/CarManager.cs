@@ -1,4 +1,6 @@
 ﻿using Business.Abstract;
+using Business.Constants;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.Dtos;
@@ -10,83 +12,85 @@ namespace Business.Concrete
 {
     public class CarManager : ICarService
     {
-        ICarDal _carDal;
+        private ICarDal _carDal;
 
         public CarManager(ICarDal carDal)
         {
             _carDal = carDal;
         }
 
-        public void Add(Car car)
+        public IResult Add(Car car)
         {
             if (car.DailyPrice > 0)
             {
                 try
                 {
                     _carDal.Add(car);
+                    return new SuccessResult(Messages.CarAdded);
                 }
                 catch (Exception)
                 {
-
-                    throw;
+                    return new ErrorResult(Messages.CarAddedError);
                 }
             }
             else
             {
-                Console.WriteLine("Lütfen geçerli fiyat giriniz.");
+                return new ErrorResult(Messages.CarDailyPriceInvalid);
             }         
 
         }
 
-        public void Delete(Car car)
+        public IResult Delete(Car car)
         {
             try
             {
                 _carDal.Delete(car);
+                return new SuccessResult(Messages.CarDeleted);
             }
             catch (Exception)
             {
 
-                throw;
+                return new ErrorResult(Messages.CarDeletedError);
             }
         }
 
-        public List<Car> GetAll()
+        public IDataResult<List<Car>> GetAll()
         {
-            return _carDal.GetAll();
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll());
         }
 
-        public Car Get(int Id)
+        public IDataResult<Car> Get(int Id)
         {
-            return _carDal.Get(c => c.Id == Id);
+            return new SuccessDataResult<Car>(_carDal.Get(c => c.Id == Id));
         }
 
-        public void Update(Car car)
+        public IResult Update(Car car)
         {
             try
             {
                 _carDal.Update(car);
+                return new SuccessResult(Messages.CarUpdated);
             }
             catch (Exception)
             {
 
-                throw;
+                return new ErrorResult(Messages.CarUpdatedError);
             }
         }
 
-        public List<Car> GetCarsByBrandId(int brandId)
+        public IDataResult<List<Car>> GetCarsByBrandId(int brandId)
         {
-            return _carDal.GetAll(c => c.BrandId == brandId);
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.BrandId == brandId));
         }
 
-        public List<Car> GetCarsByColorId(int colorId)
+        public IDataResult<List<Car>> GetCarsByColorId(int colorId)
         {
-            return _carDal.GetAll(c => c.ColorId == colorId);
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.ColorId == colorId));
         }
 
-        public List<CarDetailDto> GetCarDetails()
+        public IDataResult<List<CarDetailDto>> GetCarDetails()
         {
-            return _carDal.GetCarDetails();
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails());
         }
     }
 }

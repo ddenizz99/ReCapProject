@@ -19,31 +19,81 @@ namespace Business.Concrete
         }
 
         public IResult Add(Color color)
-        {
-            _colorDal.Add(color);
-            return new SuccessResult(Messages.ColorAdded);
+        {      
+            try
+            {
+                _colorDal.Add(color);
+                return new SuccessResult(Messages.Added);
+            }
+            catch (Exception)
+            {
+
+                return new ErrorResult(Messages.AddedError);
+            }
         }
 
         public IResult Delete(Color color)
         {
-            _colorDal.Delete(color);
-            return new SuccessResult(Messages.ColorDeleted);
+            try
+            {
+                _colorDal.Delete(color);
+                return new SuccessResult(Messages.Deleted);
+            }
+            catch (Exception)
+            {
+
+                return new ErrorResult(Messages.DeletedError);
+            }
         }
 
         public IDataResult<List<Color>> GetAll()
         {
-            return new SuccessDataResult<List<Color>>(_colorDal.GetAll());
+            try
+            {
+                var result = _colorDal.GetAll();
+                if (result.Count != 0)
+                {
+                    return new SuccessDataResult<List<Color>>(result);
+                }
+                return new ErrorDataResult<List<Color>>(Messages.EmptyData);
+            }
+            catch (Exception)
+            {
+
+                return new ErrorDataResult<List<Color>>(Messages.GetAllError);
+            }
         }
 
         public IDataResult<Color> GetById(int Id)
         {
-            return new SuccessDataResult<Color>(_colorDal.Get(c => c.Id == Id));
+            try
+            {
+                var result = _colorDal.Get(c => c.Id == Id);
+                if (result != null)
+                {
+                    return new SuccessDataResult<Color>(result);
+                }
+                return new ErrorDataResult<Color>(Messages.GetByIdNull);
+            }
+            catch (Exception)
+            {
+
+                return new ErrorDataResult<Color>(Messages.GetAllError);
+            }
         }
 
         public IResult Update(Color color)
         {
-            _colorDal.Update(color);
-            return new SuccessResult(Messages.ColorUpdated);
+            try
+            {
+                _colorDal.Update(color);
+                return new SuccessResult(Messages.Updated);
+            }
+            catch (Exception)
+            {
+
+                return new ErrorResult(Messages.UpdatedError);
+            }
         }
     }
 }

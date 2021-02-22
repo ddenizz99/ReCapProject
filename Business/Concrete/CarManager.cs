@@ -56,12 +56,39 @@ namespace Business.Concrete
 
         public IDataResult<List<Car>> GetAll()
         {
-            return new SuccessDataResult<List<Car>>(_carDal.GetAll());
+            try
+            {
+                var result = _carDal.GetAll();
+                if (result.Count != 0)
+                {
+                    return new SuccessDataResult<List<Car>>(result);
+                }
+                return new ErrorDataResult<List<Car>>(Messages.NoCar);
+            }
+            catch (Exception)
+            {
+
+                return new ErrorDataResult<List<Car>>(Messages.CarGetAllError);
+            }
+
         }
 
         public IDataResult<Car> Get(int Id)
         {
-            return new SuccessDataResult<Car>(_carDal.Get(c => c.Id == Id));
+            try
+            {
+                var result = _carDal.Get(c => c.Id == Id);
+                if (result != null)
+                {
+                    return new SuccessDataResult<Car>(result);
+                }
+                return new ErrorDataResult<Car>(Messages.CarGetByIdNull);
+            }
+            catch (Exception)
+            {
+
+                return new ErrorDataResult<Car>(Messages.CarGetAllError);
+            }
         }
 
         public IResult Update(Car car)
@@ -80,17 +107,57 @@ namespace Business.Concrete
 
         public IDataResult<List<Car>> GetCarsByBrandId(int brandId)
         {
-            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.BrandId == brandId));
+            try
+            {
+                var result = _carDal.GetAll(c => c.BrandId == brandId);
+                if (result.Count != 0)
+                {
+                    return new SuccessDataResult<List<Car>>(result);
+                }
+                return new ErrorDataResult<List<Car>>(Messages.CarGetBrandByIdNull);
+            }
+            catch (Exception)
+            {
+
+                return new ErrorDataResult<List<Car>>(Messages.CarGetAllError);
+            }
         }
 
         public IDataResult<List<Car>> GetCarsByColorId(int colorId)
         {
-            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.ColorId == colorId));
+            try
+            {
+                var result = _carDal.GetAll(c => c.ColorId == colorId);
+                if (result.Count != 0)
+                {
+                    return new SuccessDataResult<List<Car>>(result);
+                }
+                return new ErrorDataResult<List<Car>>(Messages.CarGetByColorIdNull);
+            }
+            catch (Exception)
+            {
+
+                return new ErrorDataResult<List<Car>>(Messages.CarGetAllError);
+            }
         }
 
         public IDataResult<List<CarDetailDto>> GetCarDetails()
         {
-            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails());
+            try
+            {
+                var result = _carDal.GetCarDetails();
+                if (result.Count != 0)
+                {
+                    return new SuccessDataResult<List<CarDetailDto>>(result);
+                }
+                return new ErrorDataResult<List<CarDetailDto>>(Messages.NoCar);
+            }
+            catch (Exception)
+            {
+
+                return new ErrorDataResult<List<CarDetailDto>>(Messages.CarGetAllError);
+            }
+            
         }
     }
 }

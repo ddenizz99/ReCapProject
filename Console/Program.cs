@@ -17,14 +17,14 @@ namespace ConsoleUI
             //BrandTest();
             //ProductTest();
             //UserTest();
-            //RentalTest();
+            RentalTest();
             Console.ReadKey();
         }
 
         private static void RentalTest()
         {
             IRentalService rentalService = new RentalManager(new EfRentalDal());
-            var addRental = rentalService.Add(new Rental { CarId = 2, CustomerId = 2, RentDate = DateTime.Now });
+            var addRental = rentalService.Add(new Rental { CarId = 1, CustomerId = 2, RentDate = DateTime.Now });
             if (addRental.Success)
             {
                 Console.WriteLine("Araç kiraya verildi.");
@@ -33,7 +33,8 @@ namespace ConsoleUI
             {
                 Console.WriteLine("Araç zaten şuanda kirada.");
             }
-            //rentalService.Update(new Rental { Id = 6, CarId = 2, CustomerId = 2, RentDate = new DateTime(2021, 5, 1, 8, 30, 52), ReturnDate = DateTime.Now });
+            //rentalService.Update(new Rental { Id = 3, CarId = 1, CustomerId = 2, RentDate = new DateTime(2021, 5, 1, 8, 30, 52), ReturnDate = DateTime.Now });
+            //rentalService.Delete(new Rental { Id = 4 });
             Console.WriteLine("Rental Table :");
             var detailDto = rentalService.GetRentalDetails();
             foreach (var item in detailDto.Data)
@@ -72,14 +73,14 @@ namespace ConsoleUI
         {
             ICarService carService = new CarManager(new EfCarDal());
 
-            Console.WriteLine("Yeni araç ekle : ");
-            carService.Add(new Car { BrandId = 3, ColorId = 3, ModelYear = "1999", DailyPrice = 80, Description = "F30 Kasa" });
+            //Console.WriteLine("Yeni araç ekle : ");
+            //carService.Add(new Car { BrandId = 3, ColorId = 3, ModelYear = "1999", DailyPrice = 80, Description = "F30 Kasa" });
 
-            Console.WriteLine("Araç güncelle ;");
-            carService.Update(new Car { Id = 1002, BrandId = 1, ColorId = 2, ModelYear = "2009", DailyPrice = 180, Description = "Toros" });
+            //Console.WriteLine("Araç güncelle ;");
+            //carService.Update(new Car { Id = 1002, BrandId = 1, ColorId = 2, ModelYear = "2009", DailyPrice = 180, Description = "Toros" });
 
-            Console.WriteLine("Araç Sil ;");
-            carService.Delete(new Car { Id = 2002, BrandId = 3, ColorId = 3, ModelYear = "1999", DailyPrice = 80, Description = "F30 Kasa" });
+            //Console.WriteLine("Araç Sil ;");
+            //carService.Delete(new Car { Id = 2002, BrandId = 3, ColorId = 3, ModelYear = "1999", DailyPrice = 80, Description = "F30 Kasa" });
 
             Console.WriteLine("Araçları Listele :");
             foreach (var car in carService.GetAll().Data)
@@ -88,8 +89,8 @@ namespace ConsoleUI
             }
 
             Console.WriteLine("Id si 2 olan araç : ");
-            var carId1 = carService.Get(2).Data;
-            Console.WriteLine("2 Id li Araç ; Marka : {0}, Açıklama : {1}, Model : {2}, Günlük Fiyat : {3} TL", carId1.BrandId, carId1.Description, carId1.ModelYear, carId1.DailyPrice);
+            var carId1 = carService.Get(3).Data;
+            Console.WriteLine("3 Id li Araç ; Marka : {0}, Açıklama : {1}, Model : {2}, Günlük Fiyat : {3} TL", carId1.BrandId, carId1.Description, carId1.ModelYear, carId1.DailyPrice);
 
             Console.WriteLine("Araç detaylı sıralama : ");
             foreach (var car in carService.GetCarDetails().Data)
@@ -102,9 +103,9 @@ namespace ConsoleUI
         private static void ColorTest()
         {
             IColorService colorService = new ColorManager(new EfColorDal());
-            Console.WriteLine("Kırmızı rengi ekle ve renkleri göster : ");
+            //Console.WriteLine("Kırmızı rengi ekle ve renkleri göster : ");
 
-            colorService.Add(new Color { ColorName = "Turuncu" });
+            //colorService.Add(new Color { ColorName = "Turuncu" });
 
             foreach (var color in colorService.GetAll().Data)
             {
@@ -115,8 +116,8 @@ namespace ConsoleUI
         private static void BrandTest()
         {
             IBrandService brandService = new BrandManager(new EfBrandDal());
-            Console.WriteLine("KIA markasını ekle ve tüm markaları göster : ");
-            brandService.Add(new Brand { BrandName = "KIA" });
+            //Console.WriteLine("KIA markasını ekle ve tüm markaları göster : ");
+            //brandService.Add(new Brand { BrandName = "KIA" });
             foreach (var color in brandService.GetAll().Data)
             {
                 Console.WriteLine("Marka : " + color.BrandName);
@@ -126,34 +127,34 @@ namespace ConsoleUI
         private static void ProductTest()
         {
             IProductService productService = new ProductManager(new EfProductDal());
-            //List<Product> addList = new List<Product> 
-            //{ 
-            //    new Product
-            //    {
-            //        ProductName = "Bilgisayar",
-            //        UnitPrice = 1855.65m
-            //    },
+            List<Product> addList = new List<Product>
+            {
+                new Product
+                {
+                    ProductName = "Bilgisayar",
+                    UnitPrice = 1855.65m
+                },
 
-            //    new Product
-            //    {
-            //        ProductName = "Motorsiklet",
-            //        UnitPrice = 20000
-            //    },
+                new Product
+                {
+                    ProductName = "Motorsiklet",
+                    UnitPrice = 20000
+                },
 
-            //    new Product
-            //    {
-            //        ProductName = "Telefon",
-            //        UnitPrice = 2055.75m
-            //    },
+                new Product
+                {
+                    ProductName = "Telefon",
+                    UnitPrice = 2055.75m
+                },
 
-            //    new Product
-            //    {
-            //        ProductName = "Kulaklık",
-            //        UnitPrice = 185
-            //    }
-            //};
+                new Product
+                {
+                    ProductName = "Kulaklık",
+                    UnitPrice = 185
+                }
+            };
 
-            //productService.MultipleInsertion(addList);
+            productService.MultipleInsertion(addList);
             Console.WriteLine("Ürünleri Listele");
             foreach (var product in productService.GetAll().Data)
             {

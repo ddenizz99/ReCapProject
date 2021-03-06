@@ -1,5 +1,8 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
+using Core.Utilities.Business;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -19,32 +22,16 @@ namespace Business.Concrete
             _rentalDal = rentalDal;
         }
 
+        [ValidationAspect(typeof(RentalValidator))]
         public IResult Add(Rental rental)
         {
-            try
+            IResult result = BusinessRules.Run(CanACaBeRented(rental.CarId));
+            if (result != null)
             {
-                var result = GetByCarId(rental.CarId);
-                if (result.Success)
-                {
-                    foreach (var item in result.Data)
-                    {
-                        if (item.ReturnDate == null)
-                        {
-                            return new ErrorResult(Messages.CarRental);
-                        }
-                    }
-                    _rentalDal.Add(rental);
-                    return new SuccessResult();
-                }
-                _rentalDal.Add(rental);
-                return new SuccessResult();
+                return result;
             }
-            catch (Exception)
-            {
-
-                return new ErrorResult(Messages.GetAllError);
-            }
-                       
+            _rentalDal.Add(rental);
+            return new SuccessResult();
         }
 
         public IResult Delete(Rental rental)
@@ -158,6 +145,24 @@ namespace Business.Concrete
             {
                 return new ErrorDataResult<List<RentalDetailDto>>(Messages.GetAllError);
             }
+        }
+
+        //Business Codes
+
+        private IResult CanACaBeRented(int carId)
+        {
+            var result = GetByCarId(carId);
+            if (result.Success)
+            {
+                foreach (var item in result.Data)
+                {
+                    if (item.ReturnDate == null)
+                    {
+                        return new ErrorResult(Messages.CarRental);
+                    }
+                }
+            }
+            return new SuccessResult();
         }
     }
 }

@@ -13,9 +13,10 @@ namespace WebAPI.Controllers
     public class ProductsController : ControllerBase
     {
         [HttpGet]
-        public List<Product> Get() 
+        public IActionResult Get() 
         {
-            return new List<Product> { new Product { ProductName = "Name" } };
+            var result = new List<Product> { new Product { ProductName = "Name" } };
+            return Ok(result);
         }
     }
 }

@@ -24,7 +24,7 @@ namespace ConsoleUI
         private static void RentalTest()
         {
             IRentalService rentalService = new RentalManager(new EfRentalDal());
-            var addRental = rentalService.Add(new Rental { CarId = 1, CustomerId = 2, RentDate = DateTime.Now });
+            var addRental = rentalService.Add(new Rental { CarId = 3, CustomerId = 2, RentDate = DateTime.Now });
             if (addRental.Success)
             {
                 Console.WriteLine("Araç kiraya verildi.");

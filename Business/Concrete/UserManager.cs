@@ -1,8 +1,8 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Core.Entities.Concrete;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
-using Entities.Concrete;
 using Entities.Dtos;
 using System;
 using System.Collections.Generic;
@@ -20,50 +20,11 @@ namespace Business.Concrete
         }
 
         public IResult Add(User user)
-        {       
-            try
-            {
-                _userDal.Add(user);
-                return new SuccessResult(Messages.Added);
-            }
-            catch (Exception)
-            {
-
-                return new ErrorResult(Messages.AddedError);
-            }
+        {            
+            _userDal.Add(user);
+            return new SuccessResult(Messages.Added);
         }
 
-        public IResult Delete(User user)
-        {
-            try
-            {
-                _userDal.Delete(user);
-                return new SuccessResult(Messages.Deleted);
-            }
-            catch (Exception)
-            {
-
-                return new ErrorResult(Messages.DeletedError);
-            }
-        }
-
-        public IDataResult<List<User>> GetAll()
-        {
-            try
-            {
-                var result = _userDal.GetAll();
-                if (result.Count != 0)
-                {
-                    return new SuccessDataResult<List<User>>(result);
-                }
-                return new ErrorDataResult<List<User>>(Messages.EmptyData);
-            }
-            catch (Exception)
-            {
-
-                return new ErrorDataResult<List<User>>(Messages.GetAllError);
-            }
-        }
 
         public IDataResult<List<UserDetailDto>> GetAllDetails()
         {          
@@ -83,36 +44,14 @@ namespace Business.Concrete
             }
         }
 
-        public IDataResult<User> GetById(int Id)
+        public IDataResult<User> GetByMail(string email)
         {
-            try
-            {
-                var result = _userDal.Get(u => u.Id == Id);
-                if (result != null)
-                {
-                    return new SuccessDataResult<User>(result);
-                }
-                return new ErrorDataResult<User>(Messages.GetByIdNull);
-            }
-            catch (Exception)
-            {
-
-                return new ErrorDataResult<User>(Messages.GetAllError);
-            }
+            return new SuccessDataResult<User>(_userDal.Get(u => u.Email == email));
         }
 
-        public IResult Update(User user)
+        public IDataResult<List<OperationClaim>> GetClaims(User user)
         {
-            try
-            {
-                _userDal.Update(user);
-                return new SuccessResult(Messages.Updated);
-            }
-            catch (Exception)
-            {
-
-                return new ErrorResult(Messages.UpdatedError);
-            }
+            return new SuccessDataResult<List<OperationClaim>>(_userDal.GetClaims(user));
         }
     }
 }

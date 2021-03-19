@@ -1,7 +1,7 @@
 ﻿using Core.DataAccess.EntityFramework;
+using Core.Entities.Concrete;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework.Context;
-using Entities.Concrete;
 using Entities.Dtos;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -27,11 +27,24 @@ namespace DataAccess.Concrete.EntityFramework
                                  FirstName = users.FirstName,
                                  LastName = users.LastName,
                                  Email = users.Email,
-                                 Password = users.Password,
+                                 Password = users.PasswordSalt.ToString(),
                                  CompanyName = customer.CompanyName
 
                              };
                 return (UserDetailDto) result;
+            }
+        }
+
+        public List<OperationClaim> GetClaims(User user)
+        {
+            using (var context = new ReCapProjectContext())
+            {
+                var result = from operationClaim in context.OperationClaims
+                             join userOperationClaim in context.UserOperationClaims
+                             on operationClaim.Id equals userOperationClaim.OperationClaimId
+                             where userOperationClaim.UserId == user.Id
+                             select new OperationClaim { Id = operationClaim.Id, Name = operationClaim.Name };
+                return result.ToList();
             }
         }
 
@@ -47,7 +60,7 @@ namespace DataAccess.Concrete.EntityFramework
                                  FirstName = users.FirstName,
                                  LastName = users.LastName,
                                  Email = users.Email,
-                                 Password = users.Password,
+                                 Password = users.PasswordSalt.ToString(),
                                  CompanyName = customer.CompanyName
 
                              };

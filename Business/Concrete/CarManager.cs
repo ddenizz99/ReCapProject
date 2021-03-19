@@ -1,6 +1,9 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.Performance;
 using Core.Aspects.Autofac.Validation;
 using Core.CrossCuttingConcerns.Validation;
 using Core.Utilities.Results;
@@ -22,6 +25,7 @@ namespace Business.Concrete
             _carDal = carDal;
         }
 
+        [SecuredOperation("add")]
         [ValidationAspect(typeof(CarValidator))]
         public IResult Add(Car car)
         {
@@ -43,55 +47,34 @@ namespace Business.Concrete
             }
         }
 
+        [CacheAspect(30)]
+        [PerformanceAspect(5)]
         public IDataResult<List<Car>> GetAll()
         {
-            try
+            var result = _carDal.GetAll();
+            if (result.Count != 0)
             {
-                var result = _carDal.GetAll();
-                if (result.Count != 0)
-                {
-                    return new SuccessDataResult<List<Car>>(result);
-                }
-                return new ErrorDataResult<List<Car>>(Messages.NoCar);
+                return new SuccessDataResult<List<Car>>(result);
             }
-            catch (Exception)
-            {
-
-                return new ErrorDataResult<List<Car>>(Messages.CarGetAllError);
-            }
-
+            return new ErrorDataResult<List<Car>>(Messages.NoCar);
         }
 
+        [CacheAspect]
         public IDataResult<Car> Get(int Id)
-        {
-            try
+        {   
+            var result = _carDal.Get(c => c.Id == Id);
+            if (result != null)
             {
-                var result = _carDal.Get(c => c.Id == Id);
-                if (result != null)
-                {
-                    return new SuccessDataResult<Car>(result);
-                }
-                return new ErrorDataResult<Car>(Messages.CarGetByIdNull);
+                return new SuccessDataResult<Car>(result);
             }
-            catch (Exception)
-            {
-
-                return new ErrorDataResult<Car>(Messages.CarGetAllError);
-            }
+            return new ErrorDataResult<Car>(Messages.CarGetByIdNull); 
         }
 
+        [CacheRemoveAspect("ICarService.Get")]
         public IResult Update(Car car)
-        {
-            try
-            {
-                _carDal.Update(car);
-                return new SuccessResult(Messages.CarUpdated);
-            }
-            catch (Exception)
-            {
-
-                return new ErrorResult(Messages.CarUpdatedError);
-            }
+        { 
+            _carDal.Update(car);
+            return new SuccessResult(Messages.CarUpdated);     
         }
 
         public IDataResult<List<Car>> GetCarsByBrandId(int brandId)

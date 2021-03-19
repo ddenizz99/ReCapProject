@@ -28,20 +28,12 @@ namespace Business.Concrete
 
         public IDataResult<List<UserDetailDto>> GetAllDetails()
         {          
-            try
+            var result = _userDal.GetUserDetails();
+            if (result.Count != 0)
             {
-                var result = _userDal.GetUserDetails();
-                if (result.Count != 0)
-                {
-                    return new SuccessDataResult<List<UserDetailDto>>(result);
-                }
-                return new ErrorDataResult<List<UserDetailDto>>(Messages.EmptyData);
+                return new SuccessDataResult<List<UserDetailDto>>(result);
             }
-            catch (Exception)
-            {
-
-                return new ErrorDataResult<List<UserDetailDto>>(Messages.GetAllError);
-            }
+            return new ErrorDataResult<List<UserDetailDto>>(Messages.EmptyData);
         }
 
         public IDataResult<User> GetByMail(string email)

@@ -20,80 +20,40 @@ namespace Business.Concrete
 
         public IResult Add(Customer customer)
         {
-            try
-            {
-                _customerDal.Add(customer);
-                return new SuccessResult(Messages.Added);
-            }
-            catch (Exception)
-            {
-
-                return new ErrorResult(Messages.AddedError);
-            }
+            _customerDal.Add(customer);
+            return new SuccessResult(Messages.Added);
         }
 
         public IResult Delete(Customer customer)
         {
-            try
-            {
-                _customerDal.Delete(customer);
-                return new SuccessResult(Messages.Deleted);
-            }
-            catch (Exception)
-            {
-
-                return new ErrorResult(Messages.DeletedError);
-            }
+            _customerDal.Delete(customer);
+            return new SuccessResult(Messages.Deleted);
         }
 
         public IDataResult<List<Customer>> GetAll()
         {
-            try
+            var result = _customerDal.GetAll();
+            if (result.Count != 0)
             {
-                var result = _customerDal.GetAll();
-                if (result.Count != 0)
-                {
-                    return new SuccessDataResult<List<Customer>>(result);
-                }
-                return new ErrorDataResult<List<Customer>>(Messages.EmptyData);
+                return new SuccessDataResult<List<Customer>>(result);
             }
-            catch (Exception)
-            {
-
-                return new ErrorDataResult<List<Customer>>(Messages.GetAllError);
-            }
+            return new ErrorDataResult<List<Customer>>(Messages.EmptyData);
         }
 
         public IDataResult<Customer> GetById(int Id)
         {
-            try
+            var result = _customerDal.Get(c => c.Id == Id);
+            if (result != null)
             {
-                var result = _customerDal.Get(c => c.Id == Id);
-                if (result != null)
-                {
-                    return new SuccessDataResult<Customer>(result);
-                }
-                return new ErrorDataResult<Customer>(Messages.GetByIdNull);
+                return new SuccessDataResult<Customer>(result);
             }
-            catch (Exception)
-            {
-
-                return new ErrorDataResult<Customer>(Messages.GetAllError);
-            }
+            return new ErrorDataResult<Customer>(Messages.GetByIdNull);
         }
 
         public IResult Update(Customer customer)
         {
-            try
-            {
-                _customerDal.Update(customer);
-                return new SuccessResult(Messages.Updated);
-            }
-            catch (Exception)
-            {
-
-                return new ErrorResult(Messages.UpdatedError);
-            }
+            _customerDal.Update(customer);
+            return new SuccessResult(Messages.Updated);
         }
     }
 }

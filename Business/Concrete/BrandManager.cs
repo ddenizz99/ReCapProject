@@ -20,80 +20,40 @@ namespace Business.Concrete
 
         public IResult Add(Brand brand)
         {         
-            try
-            {
-                _brandDal.Add(brand);
-                return new SuccessResult(Messages.Added);
-            }
-            catch (Exception)
-            {
-
-                return new ErrorResult(Messages.AddedError);
-            }
+            _brandDal.Add(brand);
+            return new SuccessResult(Messages.Added);
         }
 
         public IResult Delete(Brand brand)
         {
-            try
-            {
-                _brandDal.Delete(brand);
-                return new SuccessResult(Messages.Deleted);
-            }
-            catch (Exception)
-            {
-
-                return new ErrorResult(Messages.DeletedError);
-            }
+            _brandDal.Delete(brand);
+            return new SuccessResult(Messages.Deleted); 
         }
 
         public IDataResult<List<Brand>> GetAll()
         {
-            try
+            var result = _brandDal.GetAll();
+            if (result.Count != 0)
             {
-                var result = _brandDal.GetAll();
-                if (result.Count != 0)
-                {
-                    return new SuccessDataResult<List<Brand>>(result);
-                }
-                return new ErrorDataResult<List<Brand>>(Messages.EmptyData);
+                return new SuccessDataResult<List<Brand>>(result);
             }
-            catch (Exception)
-            {
-
-                return new ErrorDataResult<List<Brand>>(Messages.GetAllError);
-            }
+            return new ErrorDataResult<List<Brand>>(Messages.EmptyData); 
         }
 
         public IDataResult<Brand> GetById(int Id)
         {
-            try
-            {
                 var result = _brandDal.Get(b => b.Id == Id);
                 if (result != null)
                 {
                     return new SuccessDataResult<Brand>(result);
                 }
                 return new ErrorDataResult<Brand>(Messages.GetByIdNull);
-            }
-            catch (Exception)
-            {
-
-                return new ErrorDataResult<Brand>(Messages.GetAllError);
-            }
         }
 
         public IResult Update(Brand brand)
         {
-            try
-            {
                 _brandDal.Update(brand);
                 return new SuccessResult(Messages.Updated);
-            }
-            catch (Exception)
-            {
-
-                return new ErrorResult(Messages.UpdatedError);
-            }
         }
     }
 }

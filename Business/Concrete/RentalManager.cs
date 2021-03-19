@@ -36,115 +36,64 @@ namespace Business.Concrete
 
         public IResult Delete(Rental rental)
         {
-            try
-            {
-                _rentalDal.Delete(rental);
-                return new SuccessResult(Messages.RentalDeleted);
-            }
-            catch (Exception)
-            {
-
-                return new ErrorResult(Messages.RentalDeletedError);
-            }
+            _rentalDal.Delete(rental);
+            return new SuccessResult(Messages.RentalDeleted);
         }
 
         public IDataResult<List<Rental>> GetAll()
         {
-            try
+            var result = _rentalDal.GetAll();
+            if (result.Count != 0)
             {
-                var result = _rentalDal.GetAll();
-                if (result.Count != 0)
-                {
-                    return new SuccessDataResult<List<Rental>>(result);
-                }
-                return new ErrorDataResult<List<Rental>>(Messages.NoRental);
+                return new SuccessDataResult<List<Rental>>(result);
             }
-            catch (Exception)
-            {
-                return new ErrorDataResult<List<Rental>>(Messages.CarGetAllError);
-            }
+            return new ErrorDataResult<List<Rental>>(Messages.NoRental);
         }
 
         public IDataResult<Rental> GetById(int Id)
         {
-            try
+            var result = _rentalDal.Get(r => r.Id == Id);
+            if (result != null)
             {
-                var result = _rentalDal.Get(r => r.Id == Id);
-                if (result != null)
-                {
-                    return new SuccessDataResult<Rental>(result);
-                }
-                return new ErrorDataResult<Rental>(Messages.GetByIdNull);
+                return new SuccessDataResult<Rental>(result);
             }
-            catch (Exception)
-            {
-                return new ErrorDataResult<Rental>(Messages.GetAllError);
-            }
+            return new ErrorDataResult<Rental>(Messages.GetByIdNull);
         }
 
         public IDataResult<List<Rental>> GetByCarId(int carId)
         {
-            try
+            var result = _rentalDal.GetAll(r => r.CarId == carId);
+            if (result.Count != 0)
             {
-                var result = _rentalDal.GetAll(r => r.CarId == carId);
-                if (result.Count != 0)
-                {
-                    return new SuccessDataResult<List<Rental>>(result);
-                }
-                return new ErrorDataResult<List<Rental>>(Messages.RentalCarGetByIdNull);
+                return new SuccessDataResult<List<Rental>>(result);
             }
-            catch (Exception)
-            {
-                return new ErrorDataResult<List<Rental>>(Messages.GetAllError);
-            }
+            return new ErrorDataResult<List<Rental>>(Messages.RentalCarGetByIdNull);
         }
 
         public IResult Update(Rental rental)
         {
-            try
-            {
-                _rentalDal.Update(rental);
-                return new SuccessResult(Messages.RentalUpdated);
-            }
-            catch (Exception)
-            {
-
-                return new ErrorResult(Messages.RentalUpdatedError);
-            }
+            _rentalDal.Update(rental);
+            return new SuccessResult(Messages.RentalUpdated);
         }
 
         public IDataResult<List<RentalDetailDto>> GetRentalDetails()
         {
-            try
+            var result = _rentalDal.GetRentalDetails();
+            if (result.Count != 0)
             {
-                var result = _rentalDal.GetRentalDetails();
-                if (result.Count != 0)
-                {
-                    return new SuccessDataResult<List<RentalDetailDto>>(result);
-                }
-                return new ErrorDataResult<List<RentalDetailDto>>(Messages.NoRental);
+                return new SuccessDataResult<List<RentalDetailDto>>(result);
             }
-            catch (Exception)
-            {
-                return new ErrorDataResult<List<RentalDetailDto>>(Messages.CarGetAllError);
-            }
+            return new ErrorDataResult<List<RentalDetailDto>>(Messages.NoRental);
         }
 
         public IDataResult<List<RentalDetailDto>> GetByCarIdRentalDetails(int carId)
-        {
-            try
+        { 
+            var result = _rentalDal.GetByCarIdRentalDetails(carId);
+            if (result.Count != 0)
             {
-                var result = _rentalDal.GetByCarIdRentalDetails(carId);
-                if (result.Count != 0)
-                {
-                    return new SuccessDataResult<List<RentalDetailDto>>(result);
-                }
-                return new ErrorDataResult<List<RentalDetailDto>>(Messages.RentalCarGetByIdNull);
+                return new SuccessDataResult<List<RentalDetailDto>>(result);
             }
-            catch (Exception)
-            {
-                return new ErrorDataResult<List<RentalDetailDto>>(Messages.GetAllError);
-            }
+            return new ErrorDataResult<List<RentalDetailDto>>(Messages.RentalCarGetByIdNull);
         }
 
         //Business Codes

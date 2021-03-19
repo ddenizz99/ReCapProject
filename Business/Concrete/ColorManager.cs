@@ -36,52 +36,28 @@ namespace Business.Concrete
 
         public IDataResult<List<Color>> GetAll()
         {
-            try
+            var result = _colorDal.GetAll();
+            if (result.Count != 0)
             {
-                var result = _colorDal.GetAll();
-                if (result.Count != 0)
-                {
-                    return new SuccessDataResult<List<Color>>(result);
-                }
-                return new ErrorDataResult<List<Color>>(Messages.EmptyData);
+                return new SuccessDataResult<List<Color>>(result);
             }
-            catch (Exception)
-            {
-
-                return new ErrorDataResult<List<Color>>(Messages.GetAllError);
-            }
+            return new ErrorDataResult<List<Color>>(Messages.EmptyData);
         }
 
         public IDataResult<Color> GetById(int Id)
         {
-            try
+            var result = _colorDal.Get(c => c.Id == Id);
+            if (result != null)
             {
-                var result = _colorDal.Get(c => c.Id == Id);
-                if (result != null)
-                {
-                    return new SuccessDataResult<Color>(result);
-                }
-                return new ErrorDataResult<Color>(Messages.GetByIdNull);
+                return new SuccessDataResult<Color>(result);
             }
-            catch (Exception)
-            {
-
-                return new ErrorDataResult<Color>(Messages.GetAllError);
-            }
+            return new ErrorDataResult<Color>(Messages.GetByIdNull);
         }
 
         public IResult Update(Color color)
         {
-            try
-            {
-                _colorDal.Update(color);
-                return new SuccessResult(Messages.Updated);
-            }
-            catch (Exception)
-            {
-
-                return new ErrorResult(Messages.UpdatedError);
-            }
+            _colorDal.Update(color);
+            return new SuccessResult(Messages.Updated);
         }
     }
 }

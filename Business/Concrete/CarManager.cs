@@ -35,16 +35,8 @@ namespace Business.Concrete
 
         public IResult Delete(Car car)
         {
-            try
-            {
                 _carDal.Delete(car);
                 return new SuccessResult(Messages.CarDeleted);
-            }
-            catch (Exception)
-            {
-
-                return new ErrorResult(Messages.CarDeletedError);
-            }
         }
 
         [CacheAspect(30)]
@@ -78,58 +70,33 @@ namespace Business.Concrete
         }
 
         public IDataResult<List<Car>> GetCarsByBrandId(int brandId)
-        {
-            try
+        { 
+            var result = _carDal.GetAll(c => c.BrandId == brandId);
+            if (result.Count != 0)
             {
-                var result = _carDal.GetAll(c => c.BrandId == brandId);
-                if (result.Count != 0)
-                {
-                    return new SuccessDataResult<List<Car>>(result);
-                }
-                return new ErrorDataResult<List<Car>>(Messages.CarGetBrandByIdNull);
+                return new SuccessDataResult<List<Car>>(result);
             }
-            catch (Exception)
-            {
-
-                return new ErrorDataResult<List<Car>>(Messages.CarGetAllError);
-            }
+            return new ErrorDataResult<List<Car>>(Messages.CarGetBrandByIdNull); 
         }
 
         public IDataResult<List<Car>> GetCarsByColorId(int colorId)
         {
-            try
+            var result = _carDal.GetAll(c => c.ColorId == colorId);
+            if (result.Count != 0)
             {
-                var result = _carDal.GetAll(c => c.ColorId == colorId);
-                if (result.Count != 0)
-                {
-                    return new SuccessDataResult<List<Car>>(result);
-                }
-                return new ErrorDataResult<List<Car>>(Messages.CarGetByColorIdNull);
+                return new SuccessDataResult<List<Car>>(result);
             }
-            catch (Exception)
-            {
-
-                return new ErrorDataResult<List<Car>>(Messages.CarGetAllError);
-            }
+            return new ErrorDataResult<List<Car>>(Messages.CarGetByColorIdNull);
         }
 
         public IDataResult<List<CarDetailDto>> GetCarDetails()
-        {
-            try
+        {  
+            var result = _carDal.GetCarDetails();
+            if (result.Count != 0)
             {
-                var result = _carDal.GetCarDetails();
-                if (result.Count != 0)
-                {
-                    return new SuccessDataResult<List<CarDetailDto>>(result);
-                }
-                return new ErrorDataResult<List<CarDetailDto>>(Messages.NoCar);
+                return new SuccessDataResult<List<CarDetailDto>>(result);
             }
-            catch (Exception)
-            {
-
-                return new ErrorDataResult<List<CarDetailDto>>(Messages.CarGetAllError);
-            }
-            
+            return new ErrorDataResult<List<CarDetailDto>>(Messages.NoCar); 
         }
     }
 }

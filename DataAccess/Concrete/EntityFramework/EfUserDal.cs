@@ -27,7 +27,6 @@ namespace DataAccess.Concrete.EntityFramework
                                  FirstName = users.FirstName,
                                  LastName = users.LastName,
                                  Email = users.Email,
-                                 Password = users.PasswordSalt.ToString(),
                                  CompanyName = customer.CompanyName
 
                              };
@@ -60,7 +59,6 @@ namespace DataAccess.Concrete.EntityFramework
                                  FirstName = users.FirstName,
                                  LastName = users.LastName,
                                  Email = users.Email,
-                                 Password = users.PasswordSalt.ToString(),
                                  CompanyName = customer.CompanyName
 
                              };

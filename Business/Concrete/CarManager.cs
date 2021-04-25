@@ -27,6 +27,7 @@ namespace Business.Concrete
 
         [SecuredOperation("add")]
         [ValidationAspect(typeof(CarValidator))]
+        [CacheAspect(30)]
         public IResult Add(Car car)
         {
             _carDal.Add(car);
@@ -39,8 +40,8 @@ namespace Business.Concrete
                 return new SuccessResult(Messages.CarDeleted);
         }
 
-        [CacheAspect(30)]
         [PerformanceAspect(5)]
+        [CacheAspect(30)]
         public IDataResult<List<Car>> GetAll()
         {
             var result = _carDal.GetAll();
@@ -69,6 +70,7 @@ namespace Business.Concrete
             return new SuccessResult(Messages.CarUpdated);     
         }
 
+        [CacheAspect]
         public IDataResult<List<Car>> GetCarsByBrandId(int brandId)
         { 
             var result = _carDal.GetAll(c => c.BrandId == brandId);
@@ -79,6 +81,7 @@ namespace Business.Concrete
             return new ErrorDataResult<List<Car>>(Messages.CarGetBrandByIdNull); 
         }
 
+        [CacheAspect]
         public IDataResult<List<Car>> GetCarsByColorId(int colorId)
         {
             var result = _carDal.GetAll(c => c.ColorId == colorId);
@@ -89,6 +92,7 @@ namespace Business.Concrete
             return new ErrorDataResult<List<Car>>(Messages.CarGetByColorIdNull);
         }
 
+        [CacheAspect]
         public IDataResult<List<CarDetailDto>> GetCarDetails()
         {  
             var result = _carDal.GetCarDetails();
@@ -97,6 +101,39 @@ namespace Business.Concrete
                 return new SuccessDataResult<List<CarDetailDto>>(result);
             }
             return new ErrorDataResult<List<CarDetailDto>>(Messages.NoCar); 
+        }
+
+        [CacheAspect]
+        public IDataResult<List<CarDetailDto>> GetCarDetailsByBrandId(int brandId)
+        {
+            var result = _carDal.GetCarDetailsByBrandId(brandId);
+            if (result.Count != 0)
+            {
+                return new SuccessDataResult<List<CarDetailDto>>(result);
+            }
+            return new ErrorDataResult<List<CarDetailDto>>(Messages.CarGetBrandByIdNull);
+        }
+
+        [CacheAspect]
+        public IDataResult<List<CarDetailDto>> GetCarDetailsByColorId(int colorId)
+        {
+            var result = _carDal.GetCarDetailsByColorId(colorId);
+            if (result.Count != 0)
+            {
+                return new SuccessDataResult<List<CarDetailDto>>(result);
+            }
+            return new ErrorDataResult<List<CarDetailDto>>(Messages.CarGetBrandByIdNull);
+        }
+
+        [CacheAspect]
+        public IDataResult<CarDetailDto> GetCarDetailById(int carId)
+        {
+            var result = _carDal.GetCarDetailById(carId);
+            if (result != null)
+            {
+                return new SuccessDataResult<CarDetailDto>(result);
+            }
+            return new ErrorDataResult<CarDetailDto>(Messages.NoCar);
         }
     }
 }

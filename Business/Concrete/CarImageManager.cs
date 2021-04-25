@@ -60,6 +60,12 @@ namespace Business.Concrete
             return new SuccessDataResult<List<CarImage>>(_carImageDal.GetAll());
         }
 
+        public IDataResult<List<CarImage>> GetByCarId(int carId)
+        {
+            //return new SuccessDataResult<List<CarImage>>(_carImageDal.GetAll(i => i.CarId == carId));
+            return new SuccessDataResult<List<CarImage>>(CheckIfCarImageNull(carId));
+        }
+
         public IDataResult<CarImage> GetById(int Id)
         {
             return new SuccessDataResult<CarImage>(_carImageDal.Get(i => i.Id == Id));
@@ -115,6 +121,25 @@ namespace Business.Concrete
             //long fileLength = fileInfo.Length;
             
             return new ErrorResult("Dosya boyutu : " + FileLength.CalculateLength(file.Length));
+        }
+
+        private List<CarImage> CheckIfCarImageNull(int carId)
+        {
+            string path = "/images/default.png";
+            var result = _carImageDal.GetAll(c => c.CarId == carId).Any();
+            if (!result)
+            {
+                return new List<CarImage>
+                {
+                    new CarImage
+                    {
+                        CarId = carId,
+                        ImagePath = path,
+                        Date = DateTime.Now
+                    }
+                };
+            }
+            return _carImageDal.GetAll(c => c.CarId == carId);
         }
     }
 }

@@ -50,7 +50,22 @@ namespace DataAccess.Concrete.InMemory
             return cars.Find(c => c.Id == Id);
         }
 
-        public List<CarDetailDto> GetCarDetails()
+        public CarDetailDto GetCarDetailById(int carId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<CarDetailDto> GetCarDetails(Expression<Func<CarDetailDto, bool>> filter = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<CarDetailDto> GetCarDetailsByBrandId(int brandId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<CarDetailDto> GetCarDetailsByColorId(int colorId)
         {
             throw new NotImplementedException();
         }
